@@ -2,9 +2,11 @@ import DataNode from './node';
 
 export default class Graph {
   nodes: Map<string, DataNode>;
+  generationMap: Map<number, DataNode[]>;
 
   constructor() {
     this.nodes = new Map();
+    this.generationMap = new Map();
   }
 
   addNode(id: string) {
@@ -34,26 +36,48 @@ export default class Graph {
   }
 
   // calculate generation of each node
-  calculateGenerations() {
-    const nodes = Array.from(this.nodes.values());
+  calculateGenerationLevels() {
     const processedNodes = new Set();
 
     function calculateChildGeneration(node: DataNode) {
       node.children.forEach((child) => {
         if (processedNodes.has(child.id)) {
           // adjust nodes that don't have parent nodes to the child's other parent node
-          node.level = child.level - 1;
+          node.generation = child.generation - 1;
           return;
         }
 
-        child.level = node.level + 1;
+        child.generation = node.generation + 1;
         processedNodes.add(child.id);
 
         calculateChildGeneration(child);
       });
     }
 
-    nodes.forEach(calculateChildGeneration);
+    this.nodes.forEach(calculateChildGeneration);
   }
 
+  mapNodesByGeneration() {
+    const { generationMap } = this;
+
+    this.nodes.forEach((node) => {
+      if (generationMap.has(node.generation)) {
+        generationMap.get(node.generation)!.push(node);
+      } else {
+        generationMap.set(node.generation, [node]);
+      }
+    });
+
+    return generationMap;
+  }
+
+  getLargestGeneration() {
+    const { generationMap } = this;
+
+    const largestGeneration = Array.from(generationMap.entries()).reduce(
+      (a, b) => (a[1].length > b[1].length ? a : b),
+    );
+
+    return largestGeneration;
+  }
 }

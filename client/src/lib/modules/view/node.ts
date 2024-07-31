@@ -14,7 +14,12 @@ export default class GraphNode extends Graphics {
   private xOffset: number;
   private yOffset: number;
 
-  constructor(stage: Container, dataNode: DataNode, xOffset: number, yOffset: number) {
+  constructor(
+    stage: Container,
+    dataNode: DataNode,
+    xOffset: number,
+    yOffset: number,
+  ) {
     super({
       eventMode: 'dynamic',
     });
@@ -34,15 +39,10 @@ export default class GraphNode extends Graphics {
     this.fill(fill);
   }
 
-  setOffset(x: number, y: number) {
-    this.xOffset = x;
-    this.yOffset = y;
-  }
-
   setRect(): void {
     this.context.clear();
 
-    this.rect(400, 150 + this.yOffset, 100, 100).stroke({
+    this.rect(400 + this.xOffset, 150 + this.yOffset, 100, 100).stroke({
       color: 0x000,
       width: 2,
       alignment: 0,

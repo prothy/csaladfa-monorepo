@@ -16,7 +16,7 @@ export function buildGraph() {
     });
   });
 
-  graph.calculateGenerations();
+  graph.calculateGenerationLevels();
 
   return graph;
 }

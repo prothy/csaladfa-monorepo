@@ -16,6 +16,10 @@ class Controller {
   private readonly MAX_SCALE: number = 2;
   private readonly MIN_SCALE: number = 0.5;
 
+  readonly TILE_WIDTH: number = 200;
+  readonly TILE_HEIGHT: number = 100;
+  readonly TILE_GAP: number = 20;
+
   private transform: { x: number; y: number } = { x: 0, y: 0 };
   private scale: number = 1;
   private onClickHandler: ((event: GraphNode) => void) | undefined;
@@ -46,16 +50,26 @@ class Controller {
 
     const graph = buildGraph();
 
-    graph.getNodes().forEach((node) => {
-      const graphNode = new GraphNode(
-        this.app.stage,
-        node,
-        100,
-        node.level * 100,
-      );
-      const childrenSize = node.children.size;
+    const generations = graph.mapNodesByGeneration();
+    const largestGen = graph.getLargestGeneration();
 
-      graphNode.render();
+    const largestGenWidth =
+      largestGen.length * this.TILE_WIDTH +
+      (largestGen.length - 1) * this.TILE_GAP;
+
+    generations.forEach((nodes, gen) => {
+      const genWidth =
+        nodes.length * this.TILE_WIDTH + (nodes.length - 1) * this.TILE_GAP;
+      const genX = (largestGenWidth - genWidth) / 2;
+
+      nodes.forEach((node, i) => {
+        const x = genX + i * (this.TILE_WIDTH + this.TILE_GAP);
+        const y = gen * (this.TILE_HEIGHT + this.TILE_GAP);
+
+        const tile = new GraphNode(this.app.stage, node, x, y);
+
+        this.app.stage.addChild(tile);
+      });
     });
   }
 
