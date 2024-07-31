@@ -6,15 +6,11 @@
   let canvasContainer: HTMLDivElement;
 
   onMount(() => {
-    const graph = buildGraph();
-
-    console.log(graph.getNodes());
-
     Controller.init(canvasContainer, (event) => {
       console.log(event);
     });
 
-    return () => Controller.destroy()
+    return () => Controller.destroy();
   });
 </script>
 

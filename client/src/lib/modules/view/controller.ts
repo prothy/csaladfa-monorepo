@@ -1,4 +1,9 @@
-import { Application, Container, FederatedPointerEvent, Graphics } from 'pixi.js';
+import {
+  Application,
+  Container,
+  FederatedPointerEvent,
+  Graphics,
+} from 'pixi.js';
 import GraphNode from './node';
 import { clamp } from '$lib/utils';
 import { buildGraph } from '../parser';
@@ -23,8 +28,15 @@ class Controller {
     this.handlePointerDown = this.handlePointerDown.bind(this);
   }
 
-  async init(container: HTMLDivElement, onClickHandler: (event: GraphNode) => void): Promise<void> {
-    await this.app.init({ resizeTo: window, backgroundColor: 0xff0000, backgroundAlpha: 0 });
+  async init(
+    container: HTMLDivElement,
+    onClickHandler: (event: GraphNode) => void,
+  ): Promise<void> {
+    await this.app.init({
+      resizeTo: window,
+      backgroundColor: 0xff0000,
+      backgroundAlpha: 0,
+    });
     this.app.stage.interactive = true;
 
     container.appendChild(this.app.canvas);
@@ -35,10 +47,13 @@ class Controller {
     const graph = buildGraph();
 
     graph.getNodes().forEach((node) => {
-      const graphNode = new GraphNode(this.app.stage, node);
+      const graphNode = new GraphNode(
+        this.app.stage,
+        node,
+        100,
+        node.level * 100,
+      );
       const childrenSize = node.children.size;
-
-      graphNode.setOffset(childrenSize * 100, node.level * 100);
 
       graphNode.render();
     });
@@ -65,7 +80,11 @@ class Controller {
       app: { stage },
     } = this;
 
-    this.scale = clamp(scale + event.deltaY * SCALE_SPEED, MIN_SCALE, MAX_SCALE);
+    this.scale = clamp(
+      scale + event.deltaY * SCALE_SPEED,
+      MIN_SCALE,
+      MAX_SCALE,
+    );
     stage.scale.set(this.scale, this.scale);
     stage.position.set(
       clientX - (clientX - this.transform.x) * this.scale,

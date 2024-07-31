@@ -11,15 +11,18 @@ export default class GraphNode extends Graphics {
   private readonly HOVER_COLOR: FillInput = 0x999999;
   private readonly CLICKED_COLOR: FillInput = 0x333333;
 
-  xOffset = 0;
-  yOffset = 0;
+  private xOffset: number;
+  private yOffset: number;
 
-  constructor(stage: Container, dataNode: DataNode) {
+  constructor(stage: Container, dataNode: DataNode, xOffset: number, yOffset: number) {
     super({
       eventMode: 'dynamic',
     });
     this.stage = stage;
     this.dataNode = dataNode;
+
+    this.xOffset = xOffset;
+    this.yOffset = yOffset;
 
     this.createEventListeners();
     this.setRect();
@@ -39,11 +42,15 @@ export default class GraphNode extends Graphics {
   setRect(): void {
     this.context.clear();
 
-    this.rect(400 + this.xOffset, 150 + this.yOffset, 100, 100).stroke({
+    this.rect(400, 150 + this.yOffset, 100, 100).stroke({
       color: 0x000,
       width: 2,
       alignment: 0,
     });
+  }
+
+  setPosition(): void {
+    this.position.set(400 + this.xOffset, 150 + this.yOffset);
   }
 
   private createEventListeners(): void {

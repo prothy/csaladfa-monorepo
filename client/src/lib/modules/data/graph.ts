@@ -32,4 +32,28 @@ export default class Graph {
   getNodes() {
     return this.nodes;
   }
+
+  // calculate generation of each node
+  calculateGenerations() {
+    const nodes = Array.from(this.nodes.values());
+    const processedNodes = new Set();
+
+    function calculateChildGeneration(node: DataNode) {
+      node.children.forEach((child) => {
+        if (processedNodes.has(child.id)) {
+          // adjust nodes that don't have parent nodes to the child's other parent node
+          node.level = child.level - 1;
+          return;
+        }
+
+        child.level = node.level + 1;
+        processedNodes.add(child.id);
+
+        calculateChildGeneration(child);
+      });
+    }
+
+    nodes.forEach(calculateChildGeneration);
+  }
+
 }
