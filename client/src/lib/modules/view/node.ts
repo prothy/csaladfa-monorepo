@@ -9,7 +9,7 @@ import {
 import Controller from './controller';
 import type DataNode from '../data/node';
 
-export default class GraphNode extends Graphics {
+export default class Tile extends Graphics {
   private stage: Container;
   dataNode: DataNode;
   private displayText: string;
@@ -18,11 +18,13 @@ export default class GraphNode extends Graphics {
   private readonly HOVER_COLOR: FillInput = 0x999999;
   private readonly CLICKED_COLOR: FillInput = 0x333333;
 
-  static readonly TILE_WIDTH: number = 200;
-  static readonly TILE_HEIGHT: number = 100;
+  static readonly WIDTH: number = 200;
+  static readonly HEIGHT: number = 100;
 
   private xOffset: number;
   private yOffset: number;
+
+  connectedTo: Set<Tile> = new Set();
 
   constructor(
     stage: Container,
@@ -35,7 +37,7 @@ export default class GraphNode extends Graphics {
     });
     this.stage = stage;
     this.dataNode = dataNode;
-    this.displayText = dataNode.id;
+    this.displayText = dataNode.id.toString();
 
     this.renderText = this.renderText.bind(this);
     this.setFill = this.setFill.bind(this);
@@ -58,7 +60,7 @@ export default class GraphNode extends Graphics {
   setRect(): void {
     this.context.clear();
 
-    this.rect(0, 0, GraphNode.TILE_WIDTH, GraphNode.TILE_HEIGHT).stroke({
+    this.rect(0, 0, Tile.WIDTH, Tile.HEIGHT).stroke({
       color: 0x000,
       width: 2,
       alignment: 0,
@@ -78,8 +80,8 @@ export default class GraphNode extends Graphics {
     });
 
     text.position.set(
-      400 + this.xOffset + (GraphNode.TILE_WIDTH - text.width) / 2,
-      150 + this.yOffset + (GraphNode.TILE_HEIGHT - text.height) / 2,
+      400 + this.xOffset + (Tile.WIDTH - text.width) / 2,
+      150 + this.yOffset + (Tile.HEIGHT - text.height) / 2,
     );
 
     this.stage.addChild(text);

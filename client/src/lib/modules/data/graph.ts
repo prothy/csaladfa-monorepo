@@ -1,12 +1,15 @@
+import type { FamilyId } from '$lib/types';
 import DataNode from './node';
 
 export default class Graph {
-  nodes: Map<string, DataNode>;
+  private _nodes: Map<string, DataNode>;
   generationMap: Map<number, DataNode[]>;
+  families: Map<FamilyId, Set<DataNode>>;
 
   constructor() {
-    this.nodes = new Map();
+    this._nodes = new Map();
     this.generationMap = new Map();
+    this.families = new Map();
   }
 
   addNode(id: string) {
@@ -31,8 +34,8 @@ export default class Graph {
     return [sourceNode, destinationNode];
   }
 
-  getNodes() {
-    return this.nodes;
+  get nodes() {
+    return this._nodes;
   }
 
   // calculate generation of each node
@@ -79,5 +82,27 @@ export default class Graph {
     );
 
     return largestGeneration;
+  }
+
+  mapHouseholds() {
+    this.nodes.forEach((node) => {
+      if (!node.parents.size) {
+        return;
+      }
+
+      const familyId = Array.from(node.parents)
+        .map((parent) => parent.id)
+        .join('_') as FamilyId;
+
+      let family = this.families.get(familyId);
+
+      if (!family) {
+        this.families.set(familyId, new Set());
+      }
+
+      family = this.families.get(familyId);
+
+      family!.add(node);
+    });
   }
 }

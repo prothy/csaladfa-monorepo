@@ -4,27 +4,27 @@ import {
   FederatedPointerEvent,
   Graphics,
 } from 'pixi.js';
-import GraphNode from './node';
+import Tile from './node';
 import { clamp } from '$lib/utils';
 import { buildGraph } from '../parser';
-import type Graph from '../data/graph';
-import type DataNode from '../data/node';
+import Connection from './connection';
+import Graph from '../data/graph';
 
-class Controller {
+export class Controller {
   private app: Application;
-  nodes: Map<string, GraphNode>;
+  nodes: Map<string, Tile>;
 
   private readonly TRANSFORM_SPEED: number = 1.5;
   private readonly SCALE_SPEED: number = 0.005;
   private readonly MAX_SCALE: number = 2;
   private readonly MIN_SCALE: number = 0.5;
 
-  readonly TILE_GAP_X: number = 20;
-  readonly TILE_GAP_Y: number = 50;
+  static readonly TILE_GAP_X: number = 50;
+  static readonly TILE_GAP_Y: number = 80;
 
   private transform: { x: number; y: number } = { x: 0, y: 0 };
   private scale: number = 1;
-  private onClickHandler: ((event: GraphNode) => void) | undefined;
+  private onClickHandler: ((event: Tile) => void) | undefined;
 
   constructor() {
     this.app = new Application();
@@ -39,7 +39,7 @@ class Controller {
 
   async init(
     container: HTMLDivElement,
-    onClickHandler: (event: GraphNode) => void,
+    onClickHandler: (event: Tile) => void,
   ): Promise<void> {
     await this.app.init({
       resizeTo: window,
@@ -53,31 +53,30 @@ class Controller {
     this.onClickHandler = onClickHandler;
     this.createEventListeners();
 
-    this.renderNodes();
-    requestAnimationFrame(this.renderConnections);
-  }
-
-  renderNodes() {
     const graph = buildGraph();
 
+    this.renderNodes(graph);
+    this.renderConnections(graph);
+  }
+
+  renderNodes(graph: Graph) {
     const generations = graph.mapNodesByGeneration();
     const largestGen = graph.getLargestGeneration();
 
     const largestGenWidth =
-      largestGen.length * GraphNode.TILE_WIDTH +
-      (largestGen.length - 1) * this.TILE_GAP_X;
+      largestGen.length * Tile.WIDTH +
+      (largestGen.length - 1) * Controller.TILE_GAP_X;
 
     generations.forEach((nodes, gen) => {
       const genWidth =
-        nodes.length * GraphNode.TILE_WIDTH +
-        (nodes.length - 1) * this.TILE_GAP_X;
+        nodes.length * Tile.WIDTH + (nodes.length - 1) * Controller.TILE_GAP_X;
       const genX = (largestGenWidth - genWidth) / 2;
 
       nodes.forEach((node, i) => {
-        const x = genX + i * (GraphNode.TILE_WIDTH + this.TILE_GAP_X);
-        const y = gen * (GraphNode.TILE_HEIGHT + this.TILE_GAP_Y);
+        const x = genX + i * (Tile.WIDTH + Controller.TILE_GAP_X);
+        const y = gen * (Tile.HEIGHT + Controller.TILE_GAP_Y);
 
-        const tile = new GraphNode(this.app.stage, node, x, y);
+        const tile = new Tile(this.app.stage, node, x, y);
 
         tile.render();
 
@@ -86,27 +85,30 @@ class Controller {
     });
   }
 
-  renderConnections(): void {
-    this.nodes.forEach((node) => {
-      node.dataNode.children.forEach((child) => {
-        const childNode = this.nodes.get(child.id);
+  renderConnections(graph: Graph): void {
+    graph.mapHouseholds();
 
-        if (!childNode) {
-          return;
-        }
+    graph.families.forEach((children, familyId) => {
+      const parents = familyId.split('_');
 
-        const line = new Graphics();
+      if (!(parents.length && children.size)) {
+        return;
+      }
 
-        line
-          .moveTo(
-            node.x + GraphNode.TILE_HEIGHT,
-            node.y + GraphNode.TILE_HEIGHT,
-          )
-          .lineTo(childNode.x + GraphNode.TILE_WIDTH / 2, childNode.y)
-          .stroke({ color: 0x000, width: 2 });
+      const parentPositions = Array.from(parents).map(
+        (id) => this.nodes.get(id)!.position,
+      );
+      const childPositions = Array.from(children).map(
+        (node) => this.nodes.get(node.id)!.position,
+      );
 
-        this.app.stage.addChild(line);
-      });
+      const connection = new Connection(
+        this.app.stage,
+        childPositions,
+        parentPositions,
+      );
+
+      connection.render();
     });
   }
 
@@ -115,7 +117,7 @@ class Controller {
     this.app.destroy(true);
   }
 
-  getOnClickHandler(): ((event: GraphNode) => void) | undefined {
+  getOnClickHandler(): ((event: Tile) => void) | undefined {
     return this.onClickHandler;
   }
 
