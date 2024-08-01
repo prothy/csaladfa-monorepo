@@ -1,15 +1,25 @@
-import { Container, Graphics, type ContainerChild, type FillInput } from 'pixi.js';
+import {
+  BitmapText,
+  Container,
+  Graphics,
+  Text,
+  type ContainerChild,
+  type FillInput,
+} from 'pixi.js';
 import Controller from './controller';
 import type DataNode from '../data/node';
 
 export default class GraphNode extends Graphics {
   private stage: Container;
-  private dataNode: DataNode;
-  // private text: string;
+  dataNode: DataNode;
+  private displayText: string;
 
   private readonly DEFAULT_COLOR: FillInput = 0x666666;
   private readonly HOVER_COLOR: FillInput = 0x999999;
   private readonly CLICKED_COLOR: FillInput = 0x333333;
+
+  static readonly TILE_WIDTH: number = 200;
+  static readonly TILE_HEIGHT: number = 100;
 
   private xOffset: number;
   private yOffset: number;
@@ -25,6 +35,12 @@ export default class GraphNode extends Graphics {
     });
     this.stage = stage;
     this.dataNode = dataNode;
+    this.displayText = dataNode.id;
+
+    this.renderText = this.renderText.bind(this);
+    this.setFill = this.setFill.bind(this);
+    this.setRect = this.setRect.bind(this);
+    this.render = this.render.bind(this);
 
     this.xOffset = xOffset;
     this.yOffset = yOffset;
@@ -42,15 +58,31 @@ export default class GraphNode extends Graphics {
   setRect(): void {
     this.context.clear();
 
-    this.rect(400 + this.xOffset, 150 + this.yOffset, 100, 100).stroke({
+    this.rect(0, 0, GraphNode.TILE_WIDTH, GraphNode.TILE_HEIGHT).stroke({
       color: 0x000,
       width: 2,
       alignment: 0,
     });
+
+    this.position.set(400 + this.xOffset, 150 + this.yOffset);
   }
 
-  setPosition(): void {
-    this.position.set(400 + this.xOffset, 150 + this.yOffset);
+  renderText(): void {
+    const text = new BitmapText({
+      text: this.displayText,
+      style: {
+        fill: 0xffffff,
+        fontFamily: 'Arial',
+        fontSize: 24,
+      },
+    });
+
+    text.position.set(
+      400 + this.xOffset + (GraphNode.TILE_WIDTH - text.width) / 2,
+      150 + this.yOffset + (GraphNode.TILE_HEIGHT - text.height) / 2,
+    );
+
+    this.stage.addChild(text);
   }
 
   private createEventListeners(): void {
@@ -78,5 +110,6 @@ export default class GraphNode extends Graphics {
 
   render(): void {
     this.stage.addChild(this);
+    this.renderText();
   }
 }
