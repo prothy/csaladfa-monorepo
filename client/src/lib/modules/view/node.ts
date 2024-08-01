@@ -21,6 +21,7 @@ export default class Tile extends Graphics {
   static readonly WIDTH: number = 200;
   static readonly HEIGHT: number = 100;
 
+  // TODO move offset to parent container
   private xOffset: number;
   private yOffset: number;
 

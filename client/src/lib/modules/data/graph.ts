@@ -94,6 +94,8 @@ export default class Graph {
         .map((parent) => parent.id)
         .join('_') as FamilyId;
 
+      node.setFamilyId(familyId);
+
       let family = this.families.get(familyId);
 
       if (!family) {

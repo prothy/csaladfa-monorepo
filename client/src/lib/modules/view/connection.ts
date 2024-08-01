@@ -39,10 +39,28 @@ class Connection {
     this.parentPath = path;
   }
 
+  // TODO this is terrible
   createChildConnections() {
     const isSingleChild = this.childPositions.length === 1;
 
+    if (!isSingleChild) {
+      const parentPositionA = this.parentPositions[0];
+      const parentPositionB =
+        this.parentPositions[1] ?? this.parentPositions[0];
+
+      const pathA = new Graphics()
+        .moveTo(
+          parentPositionA.x + Tile.WIDTH,
+          parentPositionA.y + Tile.HEIGHT / 2,
+        )
+        .lineTo(parentPositionB.x, parentPositionB.y + Tile.HEIGHT / 2)
+        .stroke({ color: 0x000, width: 2 });
+
+      this.path.push(pathA);
+    }
+
     let posX = this.parentPositions[0].x + Tile.WIDTH / 2;
+    const startPosY = this.parentPositions[0].y + Tile.HEIGHT / 2;
     let endPosY =
       this.parentPositions[0].y + Tile.HEIGHT + Controller.TILE_GAP_Y / 2;
 
@@ -51,26 +69,26 @@ class Connection {
     }
 
     if (isSingleChild) {
-      endPosY = this.childPositions[0].y + Tile.HEIGHT / 2;
+      endPosY = this.parentPositions[0].y + Tile.HEIGHT + Controller.TILE_GAP_Y;
     }
 
-    const pathA = new Graphics()
-      .stroke({ color: 0x000, width: 2 })
-      .moveTo(posX, this.parentPositions[0].y + Tile.HEIGHT / 2)
-      .lineTo(posX, endPosY);
+    const pathB = new Graphics()
+      .moveTo(posX, startPosY)
+      .lineTo(posX, endPosY)
+      .stroke({ color: 0x000, width: 2 });
 
-    this.path.push(pathA);
+    this.path.push(pathB);
 
     if (isSingleChild) {
       return;
     }
 
-    const pathB = new Graphics()
-      .stroke({ color: 0x000, width: 10 })
+    const pathC = new Graphics()
       .moveTo(this.childPositions[0].x + Tile.WIDTH / 2, endPosY)
-      .lineTo(this.childPositions.at(-1)!.x + Tile.WIDTH / 2, endPosY);
+      .lineTo(this.childPositions.at(-1)!.x + Tile.WIDTH / 2, endPosY)
+      .stroke({ color: 0x000, width: 2 });
 
-    this.path.push(pathB);
+    this.path.push(pathC);
   }
 
   render() {

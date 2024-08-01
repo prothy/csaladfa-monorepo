@@ -9,6 +9,7 @@ import { clamp } from '$lib/utils';
 import { buildGraph } from '../parser';
 import Connection from './connection';
 import Graph from '../data/graph';
+import type { FamilyId } from '$lib/types';
 
 export class Controller {
   private app: Application;
@@ -33,7 +34,7 @@ export class Controller {
     this.handleScroll = this.handleScroll.bind(this);
     this.handleDrag = this.handleDrag.bind(this);
     this.handlePointerDown = this.handlePointerDown.bind(this);
-    this.renderNodes = this.renderNodes.bind(this);
+    this.generateNodes = this.generateNodes.bind(this);
     this.renderConnections = this.renderConnections.bind(this);
   }
 
@@ -55,11 +56,15 @@ export class Controller {
 
     const graph = buildGraph();
 
-    this.renderNodes(graph);
+    this.generateNodes(graph);
     this.renderConnections(graph);
+
+    this.nodes.forEach((tile) => {
+      tile.render();
+    });
   }
 
-  renderNodes(graph: Graph) {
+  generateNodes(graph: Graph) {
     const generations = graph.mapNodesByGeneration();
     const largestGen = graph.getLargestGeneration();
 
@@ -77,8 +82,6 @@ export class Controller {
         const y = gen * (Tile.HEIGHT + Controller.TILE_GAP_Y);
 
         const tile = new Tile(this.app.stage, node, x, y);
-
-        tile.render();
 
         this.nodes.set(node.id, tile);
       });
