@@ -84,15 +84,18 @@ export default class Graph {
     return largestGeneration;
   }
 
-  mapHouseholds() {
+  mapFamilies() {
     this.nodes.forEach((node) => {
       if (!node.parents.size) {
         return;
       }
 
-      const familyId = Array.from(node.parents)
-        .map((parent) => parent.id)
-        .join('_') as FamilyId;
+      const parents = Array.from(node.parents);
+
+      parents[0].setPartner(parents[1]);
+      parents[1]?.setPartner(parents[0]);
+
+      const familyId = parents.map((parent) => parent.id).join('_') as FamilyId;
 
       node.setFamilyId(familyId);
 

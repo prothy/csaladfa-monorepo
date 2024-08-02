@@ -5,6 +5,7 @@ export default class DataNode {
 
   parents: Set<DataNode>;
   children: Set<DataNode>;
+  partner: DataNode | null = null;
 
   generation: number = 0;
   familyId: FamilyId | null = null;
@@ -21,6 +22,10 @@ export default class DataNode {
 
   addParent(node: DataNode) {
     this.parents.add(node);
+  }
+
+  setPartner(node: DataNode) {
+    this.partner = node;
   }
 
   setFamilyId(id: FamilyId) {
