@@ -1,35 +1,33 @@
 import { Container, Graphics, ObservablePoint } from 'pixi.js';
 import Tile from './node';
 import { Controller } from './controller';
+import type DataNode from '../data/node';
 
 class Connection {
   stage: Container;
 
-  parentPositions: ObservablePoint[];
-  childPositions: ObservablePoint[];
+  parents: Tile[];
+  children: Tile[];
 
   parentPath: Graphics | null = null;
   path: Graphics[] = [];
 
-  constructor(
-    stage: Container,
-    childPositions: ObservablePoint[],
-    parentPositions: ObservablePoint[],
-  ) {
+  constructor(stage: Container, children: Tile[], parents: Tile[]) {
     this.stage = stage;
-    this.parentPositions = parentPositions;
-    this.childPositions = childPositions;
+
+    this.parents = parents;
+    this.children = children;
 
     this.createParentConnection = this.createParentConnection.bind(this);
     this.createChildConnections = this.createChildConnections.bind(this);
   }
 
   createParentConnection() {
-    if (!this.parentPositions[1]) {
+    if (!this.parents[1]) {
       return;
     }
 
-    const [parentA, parentB] = this.parentPositions;
+    const [parentA, parentB] = this.parents;
 
     const path = new Graphics()
       .stroke({ color: 0x000, width: 2 })
@@ -41,12 +39,11 @@ class Connection {
 
   // TODO this is terrible
   createChildConnections() {
-    const isSingleChild = this.childPositions.length === 1;
+    const isSingleChild = this.children.length === 1;
 
     if (!isSingleChild) {
-      const parentPositionA = this.parentPositions[0];
-      const parentPositionB =
-        this.parentPositions[1] ?? this.parentPositions[0];
+      const parentPositionA = this.parents[0].position;
+      const parentPositionB = (this.parents[1] ?? this.parents[0]).position;
 
       const pathA = new Graphics()
         .moveTo(
@@ -59,17 +56,16 @@ class Connection {
       this.path.push(pathA);
     }
 
-    let posX = this.parentPositions[0].x + Tile.WIDTH / 2;
-    const startPosY = this.parentPositions[0].y + Tile.HEIGHT / 2;
-    let endPosY =
-      this.parentPositions[0].y + Tile.HEIGHT + Controller.TILE_GAP_Y / 2;
+    let posX = this.parents[0].x + Tile.WIDTH / 2;
+    const startPosY = this.parents[0].y + Tile.HEIGHT / 2;
+    let endPosY = this.parents[0].y + Tile.HEIGHT + Controller.TILE_GAP_Y / 2;
 
-    if (this.parentPositions[1]) {
-      posX = this.parentPositions[0].x + Tile.WIDTH + Controller.TILE_GAP_X / 2;
+    if (this.parents[1]) {
+      posX = this.parents[0].x + Tile.WIDTH + Controller.TILE_GAP_X / 2;
     }
 
     if (isSingleChild) {
-      endPosY = this.parentPositions[0].y + Tile.HEIGHT + Controller.TILE_GAP_Y;
+      endPosY = this.parents[0].y + Tile.HEIGHT + Controller.TILE_GAP_Y;
     }
 
     const pathB = new Graphics()
@@ -84,8 +80,8 @@ class Connection {
     }
 
     const pathC = new Graphics()
-      .moveTo(this.childPositions[0].x + Tile.WIDTH / 2, endPosY)
-      .lineTo(this.childPositions.at(-1)!.x + Tile.WIDTH / 2, endPosY)
+      .moveTo(this.children[0].x + Tile.WIDTH / 2, endPosY)
+      .lineTo(this.children.at(-1)!.x + Tile.WIDTH / 2, endPosY)
       .stroke({ color: 0x000, width: 2 });
 
     this.path.push(pathC);

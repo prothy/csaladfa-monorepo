@@ -89,7 +89,7 @@ export class Controller {
   }
 
   renderConnections(graph: Graph): void {
-    graph.mapHouseholds();
+    graph.mapFamilies();
 
     graph.families.forEach((children, familyId) => {
       const parents = familyId.split('_');
@@ -98,11 +98,11 @@ export class Controller {
         return;
       }
 
-      const parentPositions = Array.from(parents).map(
-        (id) => this.nodes.get(id)!.position,
-      );
       const childPositions = Array.from(children).map(
-        (node) => this.nodes.get(node.id)!.position,
+        (node) => this.nodes.get(node.id)!,
+      );
+      const parentPositions = Array.from(parents).map(
+        (id) => this.nodes.get(id)!,
       );
 
       const connection = new Connection(
