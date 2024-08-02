@@ -34,7 +34,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@pixi/ui": "^2.1.2",
-		"pixi.js": "^8.2.2"
+		"d3": "^7.9.0",
+		"d3-dtree": "^2.4.1",
+		"lodash": "^4.17.21"
 	}
 }
