@@ -36,7 +36,6 @@
 	"type": "module",
 	"dependencies": {
 		"d3": "^7.9.0",
-		"d3-dtree": "^2.4.1",
 		"lodash": "^4.17.21"
 	}
 }

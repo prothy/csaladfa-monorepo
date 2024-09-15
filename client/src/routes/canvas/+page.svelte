@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { buildGraph } from '$lib/modules/parser';
-  import dTree from 'd3-dtree';
+  import dTree from '$lib/dtree/dtree';
 
   let canvasContainer: HTMLDivElement;
 

@@ -1,6 +1,7 @@
 // @ts-nocheck
 import TreeBuilder from './builder.js';
 import _ from 'lodash';
+import * as d3 from 'd3';
 
 const dTree = {
   VERSION: '/* @echo DTREE_VERSION */',
@@ -214,14 +215,14 @@ const dTree = {
         var sp = marriage.spouse;
 
         var spouse = {
-          name: sp.name,
+          name: sp?.name ?? id,
           id: id++,
           hidden: false,
           noParent: true,
           children: [],
-          textClass: sp.textClass ? sp.textClass : opts.styles.text,
-          class: sp.class ? sp.class : opts.styles.node,
-          extra: sp.extra,
+          textClass: sp?.textClass ? sp?.textClass : opts.styles.text,
+          class: sp?.class ? sp?.class : opts.styles.node,
+          extra: sp?.extra,
           marriageNode: m,
         };
 

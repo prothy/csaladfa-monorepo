@@ -1,4 +1,7 @@
 // @ts-nocheck
+import _ from 'lodash';
+import * as d3 from 'd3';
+
 class TreeBuilder {
   constructor(root, siblings, opts) {
     TreeBuilder.DEBUG_LEVEL = opts.debug ? 1 : 0;
