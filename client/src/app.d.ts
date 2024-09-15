@@ -5,21 +5,23 @@ declare module 'd3-dtree' {
   interface Person {
     name: string;
   }
-  interface Marriages {
-    spouse: Person;
-    children: Person[];
+
+  interface Marriage {
+    spouse?: Person;
+    children?: Person[];
   }
+
   interface DataObject {
     name: string;
-    class: string;
-    textClass: string;
+    class?: string;
+    textClass?: string;
     depthOffset: number;
-    marriages: Marriages[];
+    marriages?: Marriage[];
     extra?: Record<string, any>;
   }
 
   interface Options {
-    target: 'string';
+    target: string;
     debug: boolean;
     width: number;
     height: number;
@@ -46,6 +48,5 @@ declare module 'd3-dtree' {
     };
   }
 
-  var init: (data: DataObject[], options?: Options) => void;
+  const init: (data: DataObject[], options?: Options) => void;
 }
-

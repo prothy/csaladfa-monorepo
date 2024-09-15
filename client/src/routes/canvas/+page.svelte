@@ -1,16 +1,14 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import Controller from '$lib/modules/view/controller';
   import { buildGraph } from '$lib/modules/parser';
+  import dTree from 'd3-dtree';
 
   let canvasContainer: HTMLDivElement;
 
   onMount(() => {
-    Controller.init(canvasContainer, (event) => {
-      console.log(event);
-    });
+    const graph = buildGraph();
 
-    return () => Controller.destroy();
+    const tree = dTree.init(graph);
   });
 </script>
 

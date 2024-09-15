@@ -2,55 +2,68 @@
     {
         "id": 0,
         "name": "Grandparent",
-        "children": [
-            "1"
+        "marriages": [
+            {
+                "children": [
+                    1
+                ]
+            }
         ]
     },
     {
         "id": 1,
         "name": "John Doe",
-        "children": [
-            "3",
-            "4",
-            "6"
+        "marriages": [
+            {
+                "spouse": 2,
+                "children": [
+                    3,
+                    4,
+                    6
+                ]
+            }
         ]
     },
     {
         "id": 2,
         "name": "Jane Doe",
-        "children": [
-            "3",
-            "4",
-            "6"
+        "marriages": [
+            {
+                "spouse": 1,
+                "children": [
+                    3,
+                    4,
+                    6
+                ]
+            }
         ]
     },
     {
         "id": 3,
-        "name": "Alice",
-        "children": []
+        "name": "Alice"
     },
     {
         "id": 4,
-        "name": "Bob",
-        "children": [
-        ]
+        "name": "Bob"
     },
     {
         "id": 5,
-        "name": "Charlie",
-        "children": []
+        "name": "Charlie"
     },
     {
         "id": 6,
         "name": "David",
-        "children": [
-            "5",
-            "7"
+        "marriages": [
+            {
+                "children": [
+                    5,
+                    7
+                ]
+            }
         ]
     },
     {
         "id": 7,
-        "name": "Geronimo",
-        "children": []
+        "name": "Geronimo"
     }
 ]

@@ -1,22 +1,21 @@
+import type { DataObject } from 'd3-dtree';
 import { fetchAll } from './api';
-import Graph from './data/graph';
+import { calculateDepthOffsets } from '$lib/utils';
 
-export function buildGraph() {
+export function buildGraph(): DataObject[] {
   const data = fetchAll();
 
-  const graph = new Graph();
+  const d3Objects: DataObject[] = data.map((item) => ({
+    ...item,
+    name: item.id.toString(),
+    marriages: item.marriages?.map((marriage) => ({
+      spouse: marriage.spouse
+        ? { name: marriage.spouse.toString() }
+        : undefined,
+      children: marriage.children?.map((child) => ({ name: child.toString() })),
+    })),
+    depthOffset: 0,
+  }));
 
-  data.forEach((item) => {
-    const dataNode = graph.addNode(item.id.toString());
-
-    item.children.forEach((childId) => {
-      const childNode = graph.addNode(childId.toString());
-
-      graph.addChild(dataNode, childNode);
-    });
-  });
-
-  graph.calculateGenerationLevels();
-
-  return graph;
+  return calculateDepthOffsets(d3Objects);
 }
