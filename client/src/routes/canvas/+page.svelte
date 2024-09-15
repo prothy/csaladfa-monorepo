@@ -2,16 +2,22 @@
   import { onMount } from 'svelte';
   import { buildGraph } from '$lib/modules/parser';
   import dTree from '$lib/dtree/dtree';
+  import './tree.css'
 
-  let canvasContainer: HTMLDivElement;
+  let graphContainer: HTMLDivElement;
 
   onMount(() => {
     const graph = buildGraph();
 
-    const tree = dTree.init(graph);
+    const tree = dTree.init(graph, {
+      target: graphContainer,
+      debug: true,
+      height: 800,
+      width: 1200,
+    });
   });
 </script>
 
 <main>
-  <div bind:this={canvasContainer}></div>
+  <div bind:this={graphContainer}></div>
 </main>

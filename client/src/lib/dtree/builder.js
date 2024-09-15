@@ -47,8 +47,8 @@ class TreeBuilder {
     const zoom = (this.zoom = d3
       .zoom()
       .scaleExtent([0.1, 10])
-      .on('zoom', function () {
-        g.attr('transform', d3.event.transform);
+      .on('zoom', function (event) {
+        g.attr('transform', event.transform);
       }));
 
     // make a svg
