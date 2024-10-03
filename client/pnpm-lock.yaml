@@ -11,6 +11,9 @@ importers:
       d3:
         specifier: ^7.9.0
         version: 7.9.0
+      dtree-seed:
+        specifier: ^1.0.0
+        version: 1.0.0
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -881,6 +884,9 @@ packages:
   dir-glob@3.0.1:
     resolution: {integrity: sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==}
     engines: {node: '>=8'}
+
+  dtree-seed@1.0.0:
+    resolution: {integrity: sha512-NWS+Zh01Ziiid6+unCNSgG9FqStazT12WUsZDc8Ms4cnXBIdMjMzMXi2/7solSivrSLklTLqlvBxDqiwwcZsEg==}
 
   es6-promise@3.3.1:
     resolution: {integrity: sha512-SOp9Phqvqn7jtEUxPWdWfWoLmyt2VaJ6MpvP9Comy1MceMXqE6bxvaTu4iaxpYYPzhny28Lc+M87/c2cPK6lDg==}
@@ -2512,6 +2518,8 @@ snapshots:
   dir-glob@3.0.1:
     dependencies:
       path-type: 4.0.0
+
+  dtree-seed@1.0.0: {}
 
   es6-promise@3.3.1: {}
 
