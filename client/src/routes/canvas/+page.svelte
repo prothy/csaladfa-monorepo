@@ -2,14 +2,14 @@
   import { onMount } from 'svelte';
   import { buildGraph } from '$lib/modules/parser';
   import dTree from '$lib/dtree/dtree';
-  import './tree.css'
+  import './tree.css';
 
   let graphContainer: HTMLDivElement;
 
   onMount(() => {
     const graph = buildGraph();
 
-    const tree = dTree.init(graph, {
+    dTree.init(graph, {
       target: graphContainer,
       debug: true,
       height: 800,

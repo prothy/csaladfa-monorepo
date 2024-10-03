@@ -1,21 +1,9 @@
-import type { DataObject } from 'd3-dtree';
 import { fetchAll } from './api';
-import { calculateDepthOffsets } from '$lib/utils';
+import { seed } from '$lib/dtree/dSeeder/seeder';
+import type { TreeNode } from '$lib/dtree/dSeeder/treeNode';
 
-export function buildGraph(): DataObject[] {
+export function buildGraph(): TreeNode[] {
   const data = fetchAll();
 
-  const d3Objects: DataObject[] = data.map((item) => ({
-    ...item,
-    name: item.id.toString(),
-    marriages: item.marriages?.map((marriage) => ({
-      spouse: marriage.spouse
-        ? { name: marriage.spouse.toString() }
-        : undefined,
-      children: marriage.children?.map((child) => ({ name: child.toString() })),
-    })),
-    depthOffset: 0,
-  }));
-
-  return calculateDepthOffsets(d3Objects);
+  return seed(data, 0);
 }

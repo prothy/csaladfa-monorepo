@@ -1,7 +1,7 @@
+import type { Member } from '$lib/dtree/dSeeder/member';
 import dummy from '$lib/assets/dummy.json';
-import type { ApiDataNode } from '$lib/types';
 
-export function fetchAll(): ApiDataNode[] {
+export function fetchAll(): Member[] {
   return dummy;
 }
 

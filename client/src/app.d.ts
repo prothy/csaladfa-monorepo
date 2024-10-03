@@ -50,3 +50,12 @@ declare module 'd3-dtree' {
 
   const init: (data: DataObject[], options?: Options) => void;
 }
+
+// declare module 'dtree-seed' {
+//   interface Member {
+//     id: number;
+//     name: string;
+//     parent1Id?: number;
+//     parent2Id?: number;
+//   }
+// }
