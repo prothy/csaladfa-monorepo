@@ -17,50 +17,72 @@ function mapApiObjects(item: ApiDataNode): DataObject {
   };
 }
 
+type HelperFnArgs = {
+  nodes: DataObject[];
+  processedNodes: Set<string>;
+  id: string | undefined;
+};
+
+function findNodeById({
+  nodes,
+  processedNodes,
+  id,
+}: HelperFnArgs): DataObject | undefined {
+  if (!id || processedNodes.has(id)) {
+    return;
+  }
+
+  processedNodes.add(id);
+  return nodes.find((n) => n.name === id);
+}
+
+function getSpouseNode(args: HelperFnArgs): any {
+  const node = findNodeById(args);
+
+  if (!node) {
+    return;
+  }
+
+  return {
+    name: node.name,
+  };
+}
+
+function getFullNode(args: HelperFnArgs): any {
+  const node = findNodeById(args);
+
+  if (!node) {
+    return;
+  }
+
+  const newNode = {
+    ...node,
+    marriages: node.marriages?.map((marriage) => ({
+      spouse: getSpouseNode({ ...args, id: marriage.spouse?.name }),
+      children: marriage.children?.map((child) =>
+        getFullNode({ ...args, id: child.name }),
+      ),
+    })),
+  };
+
+  return newNode;
+}
+
 function buildTree(mappedDataObjects: DataObject[]): any {
   const processedNodes = new Set<string>();
-
-  function replaceWithNode(id: string | undefined): any {
-    if (!id || processedNodes.has(id)) {
-      return;
-    }
-
-    processedNodes.add(id);
-    const node = mappedDataObjects.find((n) => n.name === id);
-
-    if (!node) {
-      return;
-    }
-
-    return {
-      ...node,
-      marriages: node.marriages?.map((marriage) => ({
-        spouse: replaceWithNode(marriage.spouse?.name),
-        children: marriage.children?.map((child) =>
-          replaceWithNode(child.name),
-        ),
-      })),
-    };
-  }
 
   const finalDtreeMap = [];
 
   mappedDataObjects.forEach((node) => {
-    if (processedNodes.has(node.name)) {
-      return;
-    }
-
-    processedNodes.add(node.name);
-
-    finalDtreeMap.push({
-      ...node,
-      marriages: node.marriages?.map((marriage) => ({
-        spouse: replaceWithNode(marriage.spouse?.name),
-        children: marriage.children?.map((child) =>
-          replaceWithNode(child.name),
-        ),
-      })),
+    const newNode = getFullNode({
+      processedNodes,
+      nodes: mappedDataObjects,
+      id: node.name,
     });
+
+    if (newNode) {
+      finalDtreeMap.push(newNode);
+    }
   });
 
   return finalDtreeMap;
