@@ -174,14 +174,14 @@ class TreeBuilder {
           );
         }
       })
-      .on('dblclick', function () {
+      .on('dblclick', function (e) {
         // do not propagate a double click on a node
         // to prevent the zoom from being triggered
-        d3.event.stopPropagation();
+        e.stopPropagation();
       })
-      .on('click', function (d) {
+      .on('click', function (e, d) {
         // ignore double-clicks and clicks on hidden nodes
-        if (d3.event.detail === 2 || d.data.hidden) {
+        if (e.detail === 2 || d.data.hidden) {
           return;
         }
         if (d.data.isMarriage) {
@@ -195,11 +195,11 @@ class TreeBuilder {
           );
         }
       })
-      .on('contextmenu', function (d) {
+      .on('contextmenu', function (e, d) {
         if (d.data.hidden) {
           return;
         }
-        d3.event.preventDefault();
+        e.preventDefault();
         if (d.data.isMarriage) {
           opts.callbacks.marriageRightClick.call(this, d.data.extra, d.data.id);
         } else {
