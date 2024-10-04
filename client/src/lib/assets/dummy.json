@@ -1,50 +1,26 @@
 [
     {
         "id": 0,
-        "name": "Grandparent",
+        "name": "Father",
         "parent1Id": null,
         "parent2Id": null
     },
     {
         "id": 1,
-        "name": "John Doe",
-        "parent1Id": 0,
-        "parent2Id": null
-    },
-    {
-        "id": 2,
-        "name": "Jane Doe",
+        "name": "Mother",
         "parent1Id": null,
         "parent2Id": null
     },
     {
-        "id": 3,
-        "name": "Alice",
-        "parent1Id": 1,
-        "parent2Id": 2
-    },
-    {
-        "id": 4,
-        "name": "Bob",
-        "parent1Id": 1,
-        "parent2Id": 2
-    },
-    {
-        "id": 5,
-        "name": "Charlie",
-        "parent1Id": 1,
-        "parent2Id": 2
-    },
-    {
-        "id": 6,
-        "name": "David",
-        "parent1Id": 3,
-        "parent2Id": null
-    },
-    {
-        "id": 7,
-        "name": "Geronimo",
+        "id": 2,
+        "name": "Child",
         "parent1Id": 0,
-        "parent2Id": null
+        "parent2Id": 1
+    },
+    {
+        "id": 3,
+        "name": "Child 2",
+        "parent1Id": 0,
+        "parent2Id": 1
     }
 ]
