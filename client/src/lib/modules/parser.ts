@@ -7,6 +7,8 @@ function mapApiObjects(item: ApiDataNode): DataObject {
   return {
     ...item,
     name: item.id.toString(),
+    // TODO implement using id as identifier over name
+    // name: item.name,
     marriages: item.marriages?.map((marriage) => ({
       spouse: marriage.spouse
         ? { name: marriage.spouse.toString() }
@@ -71,7 +73,7 @@ function getFullNode(args: HelperFnArgs): any {
 function buildTree(mappedDataObjects: DataObject[]): any {
   const processedNodes = new Set<string>();
 
-  const finalDtreeMap = [];
+  const finalDtreeMap: any = [];
 
   mappedDataObjects.forEach((node) => {
     const newNode = getFullNode({
