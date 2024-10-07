@@ -1,25 +1,25 @@
 body {
     font: 10px sans-serif;
   }
+  .node {
+    border: 1px solid grey;
+    border-radius: 2px;
+    background: white;
+  }
+
+  .node:hover {
+    background: #ccc;
+    cursor: pointer;
+  }
+  
   .linage {
     fill: none;
     stroke: #000;
   }
+  
   .marriage {
     fill: none;
     stroke: black;
-  }
-  .man {
-    background-color: lightblue;
-    border-style: solid;
-    border-width: 1px;
-    box-sizing: border-box;
-  }
-  .woman {
-    background-color: pink;
-    border-style: solid;
-    border-width: 1px;
-    box-sizing: border-box;
   }
   .emphasis {
     font-style: italic;
