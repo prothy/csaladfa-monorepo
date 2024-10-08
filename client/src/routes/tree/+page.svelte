@@ -4,14 +4,13 @@
   import dTree from '$lib/dtree/dtree';
   import './tree.css';
   import { goto, preloadData, pushState } from '$app/navigation';
-  import { base } from '$app/paths';
   import { page } from '$app/stores';
   import Modal from '$lib/components/Modal.svelte';
 
   let graphContainer: HTMLDivElement;
 
-  onMount(() => {
-    const graph = buildGraph();
+  onMount(async () => {
+    const graph = await buildGraph();
 
     dTree.init(graph, {
       target: graphContainer,
@@ -21,11 +20,10 @@
       hideMarriageNodes: true,
       marriageNodeSize: 10,
       callbacks: {
-        nodeClick: async function (name) {
+        nodeClick: async function (name: string) {
           const result = await preloadData(`${location.pathname}/${name}`);
 
           if (result.type === 'loaded' && result.status === 200) {
-            console.log(result.data);
             pushState(location.pathname, {
               data: result.data,
             });
@@ -41,8 +39,10 @@
     <button></button>
   </nav>
   <div bind:this={graphContainer}></div>
-  
+
   {#if $page.state.data}
-    <Modal data={$page.state.data} />
+    <Modal data={$page.state.data} >
+      asdfasdf
+    </Modal>
   {/if}
 </main>

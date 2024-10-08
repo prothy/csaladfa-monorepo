@@ -1,10 +1,11 @@
 import dummy from '$lib/assets/dummy.json';
+import singleDummy from '$lib/assets/dummy-singlepage.json';
 import type { ApiDataNode } from '$lib/types';
 
-export function fetchAll(): ApiDataNode[] {
+export async function fetchAll(): Promise<ApiDataNode[]> {
   return dummy;
 }
 
-export function fetchById(id: number) {
-  return dummy.find((item) => item.id === id);
+export async function fetchById(id: string) {
+  return singleDummy;
 }

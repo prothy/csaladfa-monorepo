@@ -1,0 +1,23 @@
+{
+    "id": 1,
+    "name": "John Doe",
+    "marriages": [
+        {
+            "spouse": 2,
+            "children": [
+                3,
+                4,
+                6
+            ]
+        }
+    ],
+    "description": "Lorem ea voluptate occaecat in deserunt ea eiusmod minim ea. Incididunt qui exercitation commodo nulla aliqua cupidatat voluptate laboris culpa sunt voluptate non. Elit minim ad eiusmod cillum id cupidatat ipsum velit sint. In anim aliqua enim quis aliquip occaecat ea cupidatat esse labore ut ea dolor in. Et eiusmod in adipisicing consequat commodo commodo ea elit laboris aliqua occaecat. Est est sit occaecat mollit velit mollit aliquip magna minim.",
+    "images": [
+        "/tree/photo1.avif",
+        "/tree/photo2.avif",
+        "/tree/photo3.avif",
+        "/tree/photo4.avif",
+        "/tree/photo5.avif",
+        "/tree/photo6.avif"
+    ]
+}

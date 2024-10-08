@@ -26,7 +26,11 @@
   class="modal"
 >
   <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <div on:click|stopPropagation class="content">Modal text bla bla bla</div>
+  <div on:click|stopPropagation class="content">
+    <slot>
+      This is some modal text but there is no child component.
+    </slot>
+  </div>
 </dialog>
 
 <style>
@@ -46,5 +50,8 @@
     width: 30rem;
     height: 20rem;
     background: white;
+
+    padding: 2rem;
+    border-radius: 4px;
   }
 </style>

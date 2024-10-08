@@ -90,8 +90,8 @@ function buildTree(mappedDataObjects: DataObject[]): any {
   return finalDtreeMap;
 }
 
-export function buildGraph(): DataObject[] {
-  const data = fetchAll();
+export async function buildGraph(): Promise<DataObject[]> {
+  const data = await fetchAll();
 
   const mappedDataObjects: DataObject[] = calculateDepthOffsets(
     data.map(mapApiObjects),

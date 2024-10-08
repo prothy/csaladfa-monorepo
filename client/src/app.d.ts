@@ -50,3 +50,10 @@ declare module 'd3-dtree' {
 
   const init: (data: DataObject[], options?: Options) => void;
 }
+
+
+declare namespace App {
+  interface PageState {
+    data: Record<string, unknown>;
+  }
+}
