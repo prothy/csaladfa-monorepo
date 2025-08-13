@@ -9,14 +9,12 @@
 
   let graphContainer: HTMLDivElement;
 
-  onMount(async () => {
-    const graph = await buildGraph();
-
-    dTree.init(graph, {
+  function initDTree(graph: any) {
+    return dTree.init(graph, {
       target: graphContainer,
       debug: true,
-      height: 800,
-      width: 1200,
+      height: window.innerHeight,
+      width: window.innerWidth,
       hideMarriageNodes: true,
       marriageNodeSize: 10,
       callbacks: {
@@ -31,6 +29,27 @@
         },
       },
     });
+  }
+
+  let dtreeInstance: any;
+
+  onMount(async () => {
+    const graph = await buildGraph();
+    dtreeInstance = initDTree(graph);
+
+    const handleResize = () => {
+      if (dtreeInstance) {
+        graphContainer.removeChild(graphContainer.firstChild as Node);
+
+        dtreeInstance = initDTree(graph);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return (() => {
+      window.removeEventListener('resize', handleResize);
+    }) as never;
   });
 </script>
 
@@ -38,11 +57,9 @@
   <nav>
     <button></button>
   </nav>
-  <div bind:this={graphContainer}></div>
+  <div bind:this={graphContainer} class="container" />
 
   {#if $page.state.data}
-    <Modal data={$page.state.data} >
-      asdfasdf
-    </Modal>
+    <Modal data={$page.state.data}>asdfasdf</Modal>
   {/if}
 </main>
