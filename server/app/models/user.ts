@@ -27,4 +27,11 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
+
+  /**
+   * Verify if the provided password matches the user's password
+   */
+  async verifyPassword(password: string): Promise<boolean> {
+    return await hash.verify(this.password, password)
+  }
 }
